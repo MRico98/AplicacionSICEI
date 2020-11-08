@@ -31,9 +31,10 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Integer id, String usuario) {
-        this.id = id;
+    public Usuario(String usuario) {
         this.usuario = usuario;
+        this.password = "ADMIN123";
+        this.token = "token"+ usuario;
     }
 
     public Integer getId() {
