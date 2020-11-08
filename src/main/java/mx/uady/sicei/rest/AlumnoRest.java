@@ -60,5 +60,10 @@ public class AlumnoRest {
         return ResponseEntity.ok().body(alumnoService.deleteAlumno(id));
     }
 
+    @PostMapping("/alumnos/{studentId}/equipos/{systemId}")
+    public ResponseEntity<Alumno> postSystemToStudent(@PathVariable Integer studentId, @PathVariable Integer systemId) throws URISyntaxException {
+        return ResponseEntity.ok().body(alumnoService.addSystemToStudent(systemId, studentId));
+    }
+
 
 }

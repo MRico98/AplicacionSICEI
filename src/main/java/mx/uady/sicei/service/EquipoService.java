@@ -54,7 +54,7 @@ public class EquipoService {
         return equipo;
     }
 
-    private void validateExistanceEquipo(int equipoId){
+    public void validateExistanceEquipo(int equipoId){
         if( !equipoRepository.existsById(equipoId)){
             throw new NotFoundException("No se encontro al equipo");
         }

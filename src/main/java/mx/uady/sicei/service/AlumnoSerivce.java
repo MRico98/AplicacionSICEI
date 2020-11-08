@@ -17,6 +17,9 @@ import mx.uady.sicei.repository.UsuarioRepository;
 public class AlumnoSerivce {
 
     @Autowired
+    private EquipoService equipoService;
+
+    @Autowired
     private AlumnoRepository alumnoRepository;
 
     @Autowired
@@ -67,6 +70,16 @@ public class AlumnoSerivce {
         alumnoRepository.deleteById(id);
 
         return deletedAlumno;
+    }
+
+    public Alumno addSystemToStudent(int systemId, int studentId){
+        validateExistanceStudent(studentId);
+        equipoService.validateExistanceEquipo(systemId);
+
+        Alumno alumno = alumnoRepository.findById(studentId).get();
+        alumno.setEquipo(equipoService.getEquipo(systemId));
+        alumnoRepository.save(alumno);
+        return alumno;
     }
 
     private void validateExistanceStudent(int studentId){
