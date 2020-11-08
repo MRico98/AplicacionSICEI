@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +13,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "alumnos")
@@ -23,7 +21,7 @@ public class Alumno {
     // POJO: Plain Java Object. No existe ninguna accion
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // f(x) = y
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
@@ -33,12 +31,8 @@ public class Alumno {
     @Enumerated(EnumType.STRING)
     private Licenciatura licenciatura;
 
-    // JOIN Usuario WHERE alumno.id_usario = usuarios.id
-
-    // LAZY vs EAGER
-
     @OneToOne
-    @JoinColumn(name = "id_usuario") // alumno.id_usuario
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     @ManyToOne

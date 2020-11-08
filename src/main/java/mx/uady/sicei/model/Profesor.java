@@ -1,27 +1,32 @@
 package mx.uady.sicei.model;
 
-import java.sql.Time;
-import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "profesores")
 public class Profesor {
-    // POJO: Plain Java Object. No existe ninguna accion
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column
     private String nombre;
-    private String email;
-    private String apellido;
-    private LocalDate fechadenacimiento;
-    private Time horadeclase;
+
+    @Column(name = "horas")
+    private int horas;
 
     public Profesor() {
     }
 
-    public Profesor(Integer id, String nombre,String email,String apellido,LocalDate fechadenacimiento,Time horadeclase) {
-        this.id = id;
+    public Profesor(String nombre,int horas) {
         this.nombre = nombre;
-        this.email = email;
-        this.apellido = apellido;
-        this.fechadenacimiento = fechadenacimiento;
-        this.horadeclase = horadeclase;
+        this.horas = horas;
     }
 
     public Integer getId() {
@@ -50,63 +55,17 @@ public class Profesor {
         return this;
     }
 
-    public String getEmail() {
-        return this.email;
+    public int getHoras() {
+        return this.horas;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setHoras(int horas) {
+        this.horas = horas;
     }
 
-    public Profesor email(String email) {
-        this.email = email;
+    public Profesor horas(int horas) {
+        this.horas = horas;
         return this;
     }
 
-    public String getApellido() {
-        return this.apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public Profesor apellido(String apellido) {
-        this.apellido = apellido;
-        return this;
-    }
-
-    public LocalDate getFechadenacimiento() {
-        return this.fechadenacimiento;
-    }
-
-    public void setFechadenacimiento(LocalDate fechadenacimiento) {
-        this.fechadenacimiento = fechadenacimiento;
-    }
-
-    public Profesor fechadenacimiento(LocalDate fechadenacimiento) {
-        this.fechadenacimiento = fechadenacimiento;
-        return this;
-    }
-
-    public Time getHoradeclase() {
-        return this.horadeclase;
-    }
-
-    public void setHoradeclase(Time horadeclase) {
-        this.horadeclase = horadeclase;
-    }
-
-    public Profesor horadeclase(Time horadeclase) {
-        this.horadeclase = horadeclase;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", nombre='" + getNombre() + "'" +
-            "}";
-    }
 }

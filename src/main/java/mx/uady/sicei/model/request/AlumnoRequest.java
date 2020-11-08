@@ -28,6 +28,10 @@ public class AlumnoRequest {
         this.nombre = nombre;
     }
 
+    public Licenciatura getLicenciatura(){
+        return this.licenciatura;
+    }
+
     public AlumnoRequest nombre(String nombre) {
         this.nombre = nombre;
         return this;
