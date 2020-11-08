@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import mx.uady.sicei.model.Alumno;
 import mx.uady.sicei.model.Usuario;
-import mx.uady.sicei.model.Licenciatura;
 import mx.uady.sicei.exception.NotFoundException;
 import mx.uady.sicei.model.request.AlumnoRequest;
 import mx.uady.sicei.repository.AlumnoRepository;

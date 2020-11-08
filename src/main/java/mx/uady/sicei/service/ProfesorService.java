@@ -2,60 +2,61 @@ package mx.uady.sicei.service;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.uady.sicei.exception.NotFoundException;
 import mx.uady.sicei.model.Profesor;
 import mx.uady.sicei.model.request.ProfesorRequest;
+import mx.uady.sicei.repository.ProfesorRepository;
 
 @Service
 public class ProfesorService {
 
-    private List<Profesor> profesores = new LinkedList<>();
+    @Autowired
+    private ProfesorRepository profesorRepository;
 
-    {
-        profesores = new LinkedList<>();
-        profesores.add(new Profesor().id(1).nombre("Eduardo"));
-        profesores.add(new Profesor().id(2).nombre("Antonio"));
-        profesores.add(new Profesor().id(3).nombre("Brayan"));
-    }
-
-    public List<Profesor> getProfesor() {
+    public List<Profesor> getProfesores() {
+        List<Profesor> profesores = new LinkedList<>();
+        profesorRepository.findAll().iterator().forEachRemaining(profesores::add);
+        
         return profesores;
     }
 
     public Profesor crearProfesor(ProfesorRequest request) {
         Profesor profesor = new Profesor();
-
-        profesor.setId(profesores.size() + 1);
         profesor.setNombre(request.getNombre());
-        profesores.add(profesor);
+        profesor.setHoras(request.getHoras());
 
+        return profesorRepository.save(profesor);
+    }
+
+    public Profesor getProfesor(int id){
+        validateExistanceProfesor(id);
+        return profesorRepository.findById(id).get();
+    }
+
+    public Profesor updateProfesor(int id, ProfesorRequest request){
+        validateExistanceProfesor(id);
+        Profesor profesor = profesorRepository.findById(id).get();
+        profesor.setNombre(request.getNombre());
+        profesor.setHoras(request.getHoras());
+
+        return profesorRepository.save(profesor);
+
+    }
+
+    public Profesor deleteProfesor(int id){
+        validateExistanceProfesor(id);
+        Profesor profesor = profesorRepository.findById(id).get();
+        profesorRepository.deleteById(id);
         return profesor;
     }
 
-    public Profesor buscarProfesorId(int id) throws RuntimeException{
-        Profesor profesor = profesores.get(searchByParameter(id));
-        return profesor;
-    }
-
-    public Profesor modificarProfesor(int id,ProfesorRequest profesormodificado) throws RuntimeException{
-        int index =  searchByParameter(id);
-        profesores.get(index).setNombre(profesormodificado.getNombre());
-        return profesores.get(index);
-    }
-
-    public Profesor eliminarProfesor(int id){
-        int index = searchByParameter(id);
-        Profesor profesor = profesores.get(index);
-        profesores.remove(index);
-        return profesor;
-    }
-
-    private int searchByParameter(int id){
-        for(int contador = 0;contador < profesores.size();contador++){
-            if(id == profesores.get(contador).getId()) return contador;
+    private void validateExistanceProfesor(int profesorId){
+        if( !profesorRepository.existsById(profesorId)){
+            throw new NotFoundException("No se encontro al maestro");
         }
-        throw new NotFoundException();
     }
 }

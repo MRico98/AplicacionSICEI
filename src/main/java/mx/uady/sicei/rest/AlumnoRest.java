@@ -29,9 +29,6 @@ public class AlumnoRest {
     // GET /api/alumnos
     @GetMapping("/alumnos")
     public ResponseEntity<List<Alumno>> getAlumnos() {
-
-        // ResponseEntity es una abstraccion de una respuesta HTTP, con body y headers
-
         return ResponseEntity.ok().body(alumnoService.getAlumnos());
     }
 
