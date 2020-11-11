@@ -6,16 +6,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.uady.sicei.exception.DeleteException;
 import mx.uady.sicei.exception.NotFoundException;
 import mx.uady.sicei.model.Profesor;
 import mx.uady.sicei.model.request.ProfesorRequest;
 import mx.uady.sicei.repository.ProfesorRepository;
+import mx.uady.sicei.repository.TutoriaRepository;
 
 @Service
 public class ProfesorService {
 
     @Autowired
     private ProfesorRepository profesorRepository;
+
+    @Autowired
+    private TutoriaRepository tutoriaRepository;
 
     public List<Profesor> getProfesores() {
         List<Profesor> profesores = new LinkedList<>();
@@ -49,6 +54,9 @@ public class ProfesorService {
 
     public Profesor deleteProfesor(int id){
         validateExistanceProfesor(id);
+        if(tutoriaRepository.existsByIdProfesor(id)){
+            throw new DeleteException("No puede eliminarse, esta asociado a una tutoria");
+        }
         Profesor profesor = profesorRepository.findById(id).get();
         profesorRepository.deleteById(id);
         return profesor;

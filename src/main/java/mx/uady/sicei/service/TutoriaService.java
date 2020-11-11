@@ -35,7 +35,6 @@ public class TutoriaService {
 
     public Tutoria createTutoria(TutoriaRequest request){
         Tutoria tutoria = new Tutoria();
-
         validateCreateTutoria(request.getProfesor(), request.getAlumno());
         tutoria.setId(new TutoriaLlave(request.getProfesor(), request.getAlumno()));
         tutoria.setHoras(request.getHoras());
@@ -58,9 +57,6 @@ public class TutoriaService {
     public Tutoria deleteTutoria(int profesor_id, int alumno_id){
         validateExistanceTutoria(profesor_id, alumno_id);
         Tutoria tutoria = getTutoria(profesor_id, alumno_id);
-        /*if(tutoria.getAlumno()>0){
-            throw new DeleteException("La tutoria tiene un alumno asignado");
-        }*/
         tutoriaRepository.delete(tutoria);
         return tutoria;
     }

@@ -43,6 +43,9 @@ public class Alumno {
     @JsonBackReference
     private Equipo equipo;
 
+    @OneToMany(mappedBy = "alumno")
+    private List<Tutoria> tutorias;
+
     public Alumno() {
     }
 

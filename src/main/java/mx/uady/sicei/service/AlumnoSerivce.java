@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import mx.uady.sicei.model.Alumno;
 import mx.uady.sicei.model.Usuario;
+import mx.uady.sicei.exception.DeleteException;
 import mx.uady.sicei.exception.NotFoundException;
 import mx.uady.sicei.model.request.AlumnoRequest;
 import mx.uady.sicei.repository.AlumnoRepository;
+import mx.uady.sicei.repository.TutoriaRepository;
 import mx.uady.sicei.repository.UsuarioRepository;
 
 @Service
@@ -24,6 +26,9 @@ public class AlumnoSerivce {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private TutoriaRepository tutoriaRepository;
 
     public List<Alumno> getAlumnos() {
 
@@ -65,6 +70,9 @@ public class AlumnoSerivce {
 
     public Alumno deleteAlumno(int id){
         validateExistanceStudent(id);
+        if(tutoriaRepository.existsByIdAlumno(id)){
+            throw new DeleteException("No puede eliminarse, esta asociado a una tutoria");
+        }
         Alumno deletedAlumno = alumnoRepository.findById(id).get();
         usuarioRepository.delete(deletedAlumno.getUsuario());
         alumnoRepository.deleteById(id);
