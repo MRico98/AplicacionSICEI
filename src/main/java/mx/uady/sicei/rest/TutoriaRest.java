@@ -30,15 +30,15 @@ public class TutoriaRest {
     // GET /api/alumnos
     @GetMapping("/tutorias")
     public ResponseEntity<List<Tutoria>> getTutorias() {
-        return ResponseEntity.ok().body(tutoriasService.getTutorias());
+        return ResponseEntity.ok().body(tutoriaService.getTutorias());
     }
 
     // POST /api/Profesor
     @PostMapping("/tutorias")
-    public ResponseEntity<Tutoria> postTutorias(@RequestBody @Valid ProfesorRequest request) throws URISyntaxException {
-        Tutoria tutoria = tutoriaService.crearTutoria(request);
+    public ResponseEntity<Tutoria> postTutorias(@RequestBody @Valid TutoriaRequest request) throws URISyntaxException {
+        Tutoria tutoria = tutoriaService.createTutoria(request);
         return ResponseEntity
-            .created(new URI("/tutorias/" + tutoria.getProfesor() + "/" + tutoria.getAlumno()))
+            .created(new URI("/tutorias/" + tutoria.getId().getProfesor() + "/" + tutoria.getId().getAlumno()))
             .body(tutoria);
     }
 

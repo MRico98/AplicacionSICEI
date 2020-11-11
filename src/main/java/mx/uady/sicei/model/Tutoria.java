@@ -1,59 +1,63 @@
 package mx.uady.sicei.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "tutorias")
-public class Profesor {
+public class Tutoria {
 
-    @ManyToOne(mappedBy = "tutoria")
-    private Integer profesor_id;
+    @EmbeddedId
+    private TutoriaLlave id;
 
-    @ManyToOne(mappedBy = "tutoria")
-    private Integer alumno_id;
+    @ManyToOne
+    @MapsId("alumno")
+    @JoinColumn(name="id_alumno")
+    private Alumno alumno;
 
-    //@EmbeddedId
-    //TutoriaLlave id;
+    @ManyToOne
+    @MapsId("profesor")
+    @JoinColumn(name="id_profesor")
+    private Profesor profesor;
 
     @Column(name = "horas")
-    private int horas;
+    private Integer horas;
 
     public Tutoria() {
     }
 
-    public Tutoria(Integer profesor, Integer alumno, int horas) {
-        this.profesor_id = profesor;
-        this.alumno_id = alumno;
+    public Tutoria(TutoriaLlave id, Integer horas) {
+        this.id = id;
         this.horas = horas;
     }
 
-    public Integer getProfesor() {
-        return this.profesor_id;
-    }
-
-    public void setProfesor(Integer id) {
-        this.profesor_id = id;
-    }
-
-    public Integer getAlumno() {
-        return this.alumno_id;
-    }
-
-    public void setAlumno(Integer id) {
-        this.alumno_id = id;
-    }
-
-    public int getHoras() {
+    public Integer getHoras() {
         return this.horas;
     }
 
-    public void setHoras(int horas) {
+    public void setHoras(Integer horas) {
         this.horas = horas;
+    }
+
+    public TutoriaLlave getId() {
+        return id;
+    }
+
+    public void setId(TutoriaLlave id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Tutoria [horas=" + horas + ", id=" + id + "]";
     }
     
 }

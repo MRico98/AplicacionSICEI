@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.uady.sicei.model.Tutoria;
+import mx.uady.sicei.model.TutoriaLlave;
 import mx.uady.sicei.exception.DeleteException;
 import mx.uady.sicei.exception.NotFoundException;
 import mx.uady.sicei.model.request.TutoriaRequest;
@@ -34,25 +35,21 @@ public class TutoriaService {
 
     public Tutoria createTutoria(TutoriaRequest request){
         Tutoria tutoria = new Tutoria();
-
         validateCreateTutoria(request.getProfesor(), request.getAlumno());
-
-        tutoria.setProfesor(request.getProfesor());
-        tutoria.setAlumno(request.getAlumno());
+        tutoria.setId(new TutoriaLlave(request.getProfesor(), request.getAlumno()));
         tutoria.setHoras(request.getHoras());
         return tutoriaRepository.save(tutoria);
     }
 
     public Tutoria getTutoria(int profesor_id, int alumno_id){
         validateExistanceTutoria(profesor_id, alumno_id);
-        return tutoriaRepository.findById(id).get();
+        return tutoriaRepository.findById(new TutoriaLlave(profesor_id, alumno_id)).get();
     }
 
     public Tutoria updateTutoria(int profesor_id, int alumno_id, TutoriaRequest request){
         validateExistanceTutoria(profesor_id, alumno_id);
-        Tutoria tutoria = getTutoria(id);
-        tutoria.setProfesor(request.getProfesor());
-        tutoria.setAlumno(request.getAlumno());
+        Tutoria tutoria = getTutoria(profesor_id, alumno_id);
+        tutoria.setId(new TutoriaLlave(request.getProfesor(), request.getAlumno()));
         tutoria.setHoras(request.getHoras());
         return tutoriaRepository.save(tutoria);
     }
@@ -60,16 +57,12 @@ public class TutoriaService {
     public Tutoria deleteTutoria(int profesor_id, int alumno_id){
         validateExistanceTutoria(profesor_id, alumno_id);
         Tutoria tutoria = getTutoria(profesor_id, alumno_id);
-        if(tutoria.getAlumno().size()>0){
-            throw new DeleteException("La tutoria tiene un alumno asignado");
-        }
         tutoriaRepository.delete(tutoria);
         return tutoria;
     }
 
-    //TODO corregir
     public void validateExistanceTutoria(int profesor_id, int alumno_id){
-        if( !tutoriaRepository.existsById(tutoriaId)){
+        if( !tutoriaRepository.existsById(new TutoriaLlave(profesor_id, alumno_id))){
             throw new NotFoundException("No se encontro la tutoria");
         }
     }

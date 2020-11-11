@@ -2,54 +2,53 @@ package mx.uady.sicei.model.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class TutoriaRequest {
     
         @NotNull(message = "Ingrese un id de profesor")
-        private int profesor_id;
+        private int profesor;
 
         @NotNull(message = "Ingrese un id de alumno")
-        private int alumno_id;
+        private int alumno;
 
         @NotNull(message = "Ingrese las horas de la tutoria")
         @Min(value = 1, message = "Las horas tiene que se mayor o igual a 1")
-        @Max(value = 20, message = "Las horas máximas de tutoría son 20")
+        @Max(value = 2, message = "Las horas máximas de tutoría son 2")
         private int horas;
     
         public TutoriaRequest() {
         }
     
         public TutoriaRequest(int profesor, int alumno, int horas) {
-            this.profesor_id = profesor;
-            this.alumno_id = alumno;
+            this.profesor = profesor;
+            this.alumno = alumno;
             this.horas = horas;
         }
 
         public int getProfesor() {
-            return this.profesor_id;
+            return this.profesor;
         }
     
         public void setProfesor(int id) {
-            this.profesor_id = id;
+            this.profesor = id;
         }
 
         public TutoriaRequest profesor(int id) {
-            this.profesor_id = id;
+            this.profesor = id;
             return this;
         }
 
         public int getAlumno() {
-            return this.alumno_id;
+            return this.alumno;
         }
     
         public void setAlumno(int id) {
-            this.alumno_id = id;
+            this.alumno = id;
         }
 
         public TutoriaRequest alumno(int id) {
-            this.alumno_id = id;
+            this.alumno = id;
             return this;
         }
     
@@ -61,7 +60,7 @@ public class TutoriaRequest {
             this.horas = horas;
         }
     
-        public ProfesorRequest horas(int horas) {
+        public TutoriaRequest horas(int horas) {
             this.horas = horas;
             return this;
         }
