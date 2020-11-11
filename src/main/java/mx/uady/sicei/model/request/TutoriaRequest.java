@@ -7,10 +7,10 @@ import javax.validation.constraints.NotNull;
 public class TutoriaRequest {
     
         @NotNull(message = "Ingrese un id de profesor")
-        private int profesor_id;
+        private int profesor;
 
         @NotNull(message = "Ingrese un id de alumno")
-        private int alumno_id;
+        private int alumno;
 
         @NotNull(message = "Ingrese las horas de la tutoria")
         @Min(value = 1, message = "Las horas tiene que se mayor o igual a 1")
@@ -21,34 +21,34 @@ public class TutoriaRequest {
         }
     
         public TutoriaRequest(int profesor, int alumno, int horas) {
-            this.profesor_id = profesor;
-            this.alumno_id = alumno;
+            this.profesor = profesor;
+            this.alumno = alumno;
             this.horas = horas;
         }
 
         public int getProfesor() {
-            return this.profesor_id;
+            return this.profesor;
         }
     
         public void setProfesor(int id) {
-            this.profesor_id = id;
+            this.profesor = id;
         }
 
         public TutoriaRequest profesor(int id) {
-            this.profesor_id = id;
+            this.profesor = id;
             return this;
         }
 
         public int getAlumno() {
-            return this.alumno_id;
+            return this.alumno;
         }
     
         public void setAlumno(int id) {
-            this.alumno_id = id;
+            this.alumno = id;
         }
 
         public TutoriaRequest alumno(int id) {
-            this.alumno_id = id;
+            this.alumno = id;
             return this;
         }
     

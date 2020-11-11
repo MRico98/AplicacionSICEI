@@ -1,8 +1,11 @@
 package mx.uady.sicei.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -12,15 +15,17 @@ import javax.persistence.Table;
 @Table(name = "tutorias")
 public class Tutoria {
 
-    @EmbeddedId 
+    @EmbeddedId
     private TutoriaLlave id;
 
     @ManyToOne
-    @JoinColumn(name="id_alumno", nullable=false, insertable = false, updatable = false)
+    @MapsId("alumno")
+    @JoinColumn(name="id_alumno")
     private Alumno alumno;
 
     @ManyToOne
-    @JoinColumn(name="id_profesor", nullable=false, insertable = false, updatable = false)
+    @MapsId("profesor")
+    @JoinColumn(name="id_profesor")
     private Profesor profesor;
 
     @Column(name = "horas")
