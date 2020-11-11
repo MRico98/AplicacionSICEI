@@ -2,7 +2,6 @@ package mx.uady.sicei.model.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class TutoriaRequest {
@@ -61,7 +60,7 @@ public class TutoriaRequest {
             this.horas = horas;
         }
     
-        public ProfesorRequest horas(int horas) {
+        public TutoriaRequest horas(int horas) {
             this.horas = horas;
             return this;
         }
