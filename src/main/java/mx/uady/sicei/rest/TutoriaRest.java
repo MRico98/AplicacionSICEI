@@ -38,7 +38,7 @@ public class TutoriaRest {
     public ResponseEntity<Tutoria> postTutorias(@RequestBody @Valid TutoriaRequest request) throws URISyntaxException {
         Tutoria tutoria = tutoriaService.createTutoria(request);
         return ResponseEntity
-            .created(new URI("/tutorias/" + tutoria.getProfesor() + "/" + tutoria.getAlumno()))
+            .created(new URI("/tutorias/" + tutoria.getId().getProfesor() + "/" + tutoria.getId().getAlumno()))
             .body(tutoria);
     }
 

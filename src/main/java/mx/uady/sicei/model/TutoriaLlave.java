@@ -4,39 +4,38 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Embeddable
 public class TutoriaLlave implements Serializable {
 
-    //https://www.baeldung.com/jpa-many-to-many
-
-    //Fijese que son INTEGER
-    private Integer profesorId;
-    private Integer alumnoId;
+    private Integer id_profesor;
+    private Integer id_alumno;
 
     public TutoriaLlave(){
 
     }
 
     public TutoriaLlave(Integer profesor, Integer alumno) {
-        this.profesorId = profesor;
-        this.alumnoId = alumno;
+        this.id_profesor = profesor;
+        this.id_alumno = alumno;
     }
 
     public Integer getProfesor() {
-        return this.profesorId;
+        return this.id_profesor;
     }
 
     public void setProfesor(Integer id) {
-        this.profesorId = id;
+        this.id_profesor = id;
     }
 
     public Integer getAlumno() {
-        return this.alumnoId;
+        return this.id_alumno;
     }
 
     public void setAlumno(Integer id) {
-        this.alumnoId = id;
+        this.id_alumno = id;
     }
 
     @Override

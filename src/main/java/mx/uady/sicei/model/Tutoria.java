@@ -14,16 +14,6 @@ public class Tutoria {
     @EmbeddedId 
     private TutoriaLlave id;
 
-    //Fijese que son profesor y alumno
-
-    @ManyToOne
-    @JoinColumn(name = "id_profesor")
-    private Profesor profesorid;
-
-    @ManyToOne
-    @JoinColumn(name = "id_alumno")
-    private Alumno alumnoid;
-
     @Column(name = "horas")
     private Integer horas;
 
@@ -33,22 +23,6 @@ public class Tutoria {
     public Tutoria(TutoriaLlave id, Integer horas) {
         this.id = id;
         this.horas = horas;
-    }
-
-    public Integer getProfesor() {
-        return this.getProfesor();
-    }
-
-    public void setProfesor(Integer id) {
-        this.setProfesor(id);
-    }
-
-    public Integer getAlumno() {
-        return this.getAlumno();
-    }
-
-    public void setAlumno(Integer id) {
-        this.setAlumno(id);
     }
 
     public Integer getHoras() {
