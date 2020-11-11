@@ -14,7 +14,7 @@ public class TutoriaRequest {
 
         @NotNull(message = "Ingrese las horas de la tutoria")
         @Min(value = 1, message = "Las horas tiene que se mayor o igual a 1")
-        @Max(value = 20, message = "Las horas máximas de tutoría son 20")
+        @Max(value = 2, message = "Las horas máximas de tutoría son 2")
         private int horas;
     
         public TutoriaRequest() {

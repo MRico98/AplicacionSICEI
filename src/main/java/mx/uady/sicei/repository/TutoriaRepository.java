@@ -7,5 +7,7 @@ import mx.uady.sicei.model.TutoriaLlave;
 
 @Repository
 public interface TutoriaRepository extends CrudRepository<Tutoria, TutoriaLlave> {
+    boolean existsByIdProfesor(int id);
 
+    boolean existsByIdAlumno(int id);
 }

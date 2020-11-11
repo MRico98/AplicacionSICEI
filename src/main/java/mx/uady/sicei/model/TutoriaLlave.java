@@ -3,6 +3,7 @@ package mx.uady.sicei.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -10,32 +11,34 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class TutoriaLlave implements Serializable {
 
-    private Integer id_profesor;
-    private Integer id_alumno;
+    @Column(name = "id_profesor")
+    private Integer profesor;
+    @Column(name = "id_alumno")
+    private Integer alumno;
 
     public TutoriaLlave(){
 
     }
 
     public TutoriaLlave(Integer profesor, Integer alumno) {
-        this.id_profesor = profesor;
-        this.id_alumno = alumno;
+        this.profesor = profesor;
+        this.alumno = alumno;
     }
 
     public Integer getProfesor() {
-        return this.id_profesor;
+        return this.profesor;
     }
 
     public void setProfesor(Integer id) {
-        this.id_profesor = id;
+        this.profesor = id;
     }
 
     public Integer getAlumno() {
-        return this.id_alumno;
+        return this.alumno;
     }
 
     public void setAlumno(Integer id) {
-        this.id_alumno = id;
+        this.alumno = id;
     }
 
     @Override
