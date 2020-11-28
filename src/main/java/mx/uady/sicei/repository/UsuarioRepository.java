@@ -11,6 +11,10 @@ import mx.uady.sicei.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    public Usuario findByUsuario(String usuario);
+    Optional<Usuario> findByUsuario(String usuario);
+
+    Optional<Usuario> findByUsuarioAndPassword(String usuario, String password);
+
+    Usuario findByToken(String token);
 
 }
