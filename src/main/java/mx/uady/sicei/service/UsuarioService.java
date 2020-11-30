@@ -100,7 +100,7 @@ public class UsuarioService {
     }
 
     public void validateCreateUsuario(String usuario){
-        if(usuarioRepository.findByUsuario(usuario)){
+        if(usuarioRepository.findByUsuario(usuario).isPresent()){
             throw new AlreadyExistsException("El usuario ya ha sido registrado");
         }
     }
