@@ -51,12 +51,15 @@ public class UsuarioService {
         String token = UUID.randomUUID().toString();
         usuarioCrear.setToken(token);
 
+        validateCreateStudent(request.getMatricula());
+
         Usuario usuarioGuardado = usuarioRepository.save(usuarioCrear);
 
         Alumno alumno = new Alumno();
 
         alumno.setNombre(request.getNombre());
         alumno.setUsuario(usuarioGuardado); // Relacionar 2 entidades
+        alumno.setMatricula(request.getMatricula());
 
         alumno = alumnoRepository.save(alumno);
 
@@ -102,6 +105,12 @@ public class UsuarioService {
     public void validateCreateUsuario(String usuario){
         if(usuarioRepository.findByUsuario(usuario).isPresent()){
             throw new AlreadyExistsException("El usuario ya ha sido registrado");
+        }
+    }
+
+    public void validateCreateStudent(String matricula){
+        if(alumnoRepository.findByMatricula(matricula).isPresent()){
+            throw new AlreadyExistsException("Ya existe un alumno con la misma matricula");
         }
     }
 

@@ -56,10 +56,4 @@ public class UsuarioRest {
         return ResponseEntity.ok(usuarioService.logout());
     }
 
-    @GetMapping("/quienSoy")
-    public ResponseEntity<Usuario> getQuienSoy() {
-        usuarioService.logout();
-        return ResponseEntity.ok().body(usuario);
-    }
-
 }

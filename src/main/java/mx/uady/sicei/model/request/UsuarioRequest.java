@@ -16,6 +16,10 @@ public class UsuarioRequest {
     @NotEmpty
     private String nombre;
 
+    @NotEmpty
+    @NotNull
+    private String matricula;
+
     @NotNull
     @Size(min = 8, max = 50)
     @NotEmpty
@@ -47,5 +51,13 @@ public class UsuarioRequest {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getMatricula() {
+        return matricula;
     }
 }

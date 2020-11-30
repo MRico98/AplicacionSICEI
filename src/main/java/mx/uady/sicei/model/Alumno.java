@@ -33,6 +33,9 @@ public class Alumno {
     @Enumerated(EnumType.STRING)
     private Licenciatura licenciatura;
 
+    @Column
+    private String matricula;
+
     // JOIN Usuario WHERE alumno.id_usario = usuarios.id
 
     // LAZY vs EAGER
@@ -102,6 +105,13 @@ public class Alumno {
 
     public Equipo getEquipo() {
         return equipo;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+    public String getMatricula() {
+        return matricula;
     }
 
     @Override
