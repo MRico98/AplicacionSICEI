@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import mx.uady.sicei.exception.NotFoundException;
+import mx.uady.sicei.exception.AlreadyExistsException;
 import mx.uady.sicei.model.Alumno;
 import mx.uady.sicei.model.Token;
 import mx.uady.sicei.model.Usuario;
@@ -41,6 +42,8 @@ public class UsuarioService {
     @Transactional
     public Usuario crear(UsuarioRequest request) {
         Usuario usuarioCrear = new Usuario();
+
+        validateCreateUsuario(request.getUsuario());
 
         usuarioCrear.setUsuario(request.getUsuario());
         usuarioCrear.setPassword(request.getPassword());
@@ -94,6 +97,12 @@ public class UsuarioService {
         }
 
         throw new NotFoundException();
+    }
+
+    public void validateCreateUsuario(String usuario){
+        if(usuarioRepository.findByUsuario(usuario)){
+            throw new AlreadyExistsException("El usuario ya ha sido registrado");
+        }
     }
 
 }
