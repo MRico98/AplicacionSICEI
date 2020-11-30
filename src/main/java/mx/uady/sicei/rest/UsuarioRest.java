@@ -34,7 +34,7 @@ public class UsuarioRest {
         return ResponseEntity.ok(usuarios);
     }
 
-    @PostMapping("/usuario")
+    @PostMapping("/register")
     public ResponseEntity<Usuario> registrarUsuario(@RequestBody UsuarioRequest request) {
         Usuario u = usuarioService.crear(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(u);

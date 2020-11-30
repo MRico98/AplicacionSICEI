@@ -17,7 +17,7 @@ public class UsuarioRequest {
     private String nombre;
 
     @NotNull
-    @Size(min = 5, max = 50)
+    @Size(min = 8, max = 50)
     @NotEmpty
     private String password;
 
