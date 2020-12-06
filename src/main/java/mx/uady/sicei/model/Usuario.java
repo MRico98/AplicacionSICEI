@@ -24,9 +24,9 @@ public class Usuario {
     @JsonIgnore
     private String password;
 
-    @Column
+    @Column(name = "secret")
     @JsonIgnore
-    private String token;
+    private String secret;
 
     public Usuario() {
     }
@@ -76,18 +76,13 @@ public class Usuario {
         return password;
     }
 
-    /**
-     * @param token the token to set
-     */
-    public void setToken(String token) {
-        this.token = token;
+
+    public String getSecret() {
+        return secret;
     }
 
-    /**
-     * @return the token
-     */
-    public String getToken() {
-        return token;
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
     

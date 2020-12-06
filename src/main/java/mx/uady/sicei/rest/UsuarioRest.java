@@ -46,6 +46,12 @@ public class UsuarioRest {
         return ResponseEntity.status(HttpStatus.OK).body(u);
     }
 
+    @GetMapping("/who")
+    public ResponseEntity<Usuario> whoAmI() {
+        Usuario u = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.OK).body(u);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Token> login(@RequestBody @Valid LoginRequest request) {
         return ResponseEntity.ok(usuarioService.loadUser(request.getEmail(), request.getPassword()));

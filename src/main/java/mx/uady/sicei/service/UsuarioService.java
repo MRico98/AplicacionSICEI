@@ -1,33 +1,27 @@
 package mx.uady.sicei.service;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import mx.uady.sicei.exception.NotFoundException;
 import mx.uady.sicei.exception.AlreadyExistsException;
+import mx.uady.sicei.exception.NotFoundException;
 import mx.uady.sicei.model.Alumno;
 import mx.uady.sicei.model.Token;
 import mx.uady.sicei.model.Usuario;
 import mx.uady.sicei.model.request.UsuarioRequest;
 import mx.uady.sicei.repository.AlumnoRepository;
 import mx.uady.sicei.repository.UsuarioRepository;
-import net.bytebuddy.utility.RandomString;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import mx.uady.sicei.util.JwtTokenUtil;
 
 @Service
 public class UsuarioService {
+    @Autowired
+    private JwtTokenUtil jwtUtil;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -47,9 +41,8 @@ public class UsuarioService {
 
         usuarioCrear.setUsuario(request.getUsuario());
         usuarioCrear.setPassword(request.getPassword());
-
-        String token = UUID.randomUUID().toString();
-        usuarioCrear.setToken(token);
+        String secret = UUID.randomUUID().toString();
+        usuarioCrear.setSecret(secret);
 
         validateCreateStudent(request.getMatricula());
 
@@ -60,8 +53,7 @@ public class UsuarioService {
         alumno.setNombre(request.getNombre());
         alumno.setUsuario(usuarioGuardado); // Relacionar 2 entidades
         alumno.setMatricula(request.getMatricula());
-
-        alumno = alumnoRepository.save(alumno);
+        alumnoRepository.save(alumno);
 
         return usuarioGuardado;
     }
@@ -70,25 +62,19 @@ public class UsuarioService {
         Optional<Usuario> opt = usuarioRepository.findByUsuarioAndPassword(email, password);
         if (opt.isPresent()) {
             Usuario user = opt.get();
-            String uuid = RandomString.make(10);
-            //Create Session Token
-            user.setToken(uuid);
-            usuarioRepository.save(user);
-
+            //Se crea el token
+            jwtUtil.setSecret(user.getSecret());
             Token token = new Token();
-            token.setToken(uuid);
+            token.setToken(jwtUtil.generateToken(user.getUsuario()));
 
             return token;
-        }else{
-            throw new NotFoundException();
         }
+
+        throw new NotFoundException();
     }
 
     public Usuario logout(){
-       Usuario user = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       user.setToken(" ");
-       usuarioRepository.save(user);
-       return user;
+       return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public Usuario getUsuario(Integer id) {

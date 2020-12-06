@@ -130,7 +130,7 @@ CREATE TABLE `usuarios` (
   `id` int NOT NULL AUTO_INCREMENT,
   `usuario` varchar(45) DEFAULT NULL,
   `password` varchar(45) NOT NULL,
-  `token` varchar(45) DEFAULT NULL,
+  `secret` LONGTEXT DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
