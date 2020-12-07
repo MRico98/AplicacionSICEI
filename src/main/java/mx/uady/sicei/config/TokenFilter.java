@@ -8,11 +8,14 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.jose4j.jwt.JwtClaims;
+import org.jose4j.jwt.consumer.InvalidJwtException;
+import org.jose4j.jwt.consumer.JwtConsumer;
+import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 import mx.uady.sicei.model.Usuario;
@@ -40,45 +44,38 @@ public class TokenFilter extends GenericFilterBean {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String authHeader = httpRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        Usuario user;
-        
-        if(authHeader == null || authHeader.isEmpty()) {
-            chain.doFilter(request, response);
-            return;
-        }
-        String[] body =authHeader.split("\\.");
 
-        //Se obtiene el payload
-        String payload = base64UrlDecode(body[1]);
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(payload);
-        String userName = jsonNode.get("name").asText();
-
-        Optional<Usuario> usuario = usuarioRepository.findByUsuario(userName);
-        if(!usuario.isPresent()){
+        if (authHeader == null || authHeader.isEmpty()) {
             chain.doFilter(request, response);
             return;
         }
 
-        user = usuario.get();
-        JwtTokenUtil jwtUtil = new JwtTokenUtil(user.getSecret());
-        boolean isValid = jwtUtil.validateToken(authHeader, user.getUsuario());
+        try {
+            JwtConsumer jwtConsumer = new JwtConsumerBuilder().setSkipSignatureVerification().build();
+            JwtClaims claims = jwtConsumer.processToClaims(authHeader);
+            Optional<Usuario> usuario = usuarioRepository.findById(Integer.valueOf(claims.getJwtId()));
 
-        if (!isValid) {
+            if(!usuario.isPresent()){
+                chain.doFilter(request, response);
+                return;
+            }
+
+            Usuario user = usuario.get();
+            JwtTokenUtil jwtUtil = new JwtTokenUtil(user.getSecret());
+            boolean isValid = jwtUtil.validateToken(authHeader, user.getUsuario());
+    
+            if (!isValid) {
+                chain.doFilter(request, response);
+                return;
+            }
+    
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (Exception e) {
+            log.info(e.getMessage());
             chain.doFilter(request, response);
             return;
         }
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
-    }
-
-    public static String base64UrlDecode(String input) {
-        String result = null;
-        Base64 decoder = new Base64(true);
-        byte[] decodedBytes = decoder.decode(input);
-        result = new String(decodedBytes);
-        return result;
     }
 }

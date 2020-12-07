@@ -65,8 +65,7 @@ public class UsuarioService {
             //Se crea el token
             jwtUtil.setSecret(user.getSecret());
             Token token = new Token();
-            token.setToken(jwtUtil.generateToken(user.getUsuario()));
-
+            token.setToken(jwtUtil.createToken(user));
             return token;
         }
 

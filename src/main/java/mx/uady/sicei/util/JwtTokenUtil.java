@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import mx.uady.sicei.model.Usuario;
 
 
 @Component
@@ -53,19 +54,14 @@ public class JwtTokenUtil implements Serializable {
 		return expiration.before(new Date());
 	}
 
-	//generate token for user
-	public String generateToken(String username) {
-		return createToken(username);
-	}
-
-	private String createToken(String subject) {
+	public String createToken(Usuario user) {
 		Date currentDate = new Date();
 		Calendar calendar = Calendar.getInstance(); 
 		calendar.setTime(currentDate); 
 		calendar.add(Calendar.MINUTE, EXPIRATION_IN_MINUTES);
 		return Jwts.builder()
-				.claim("name", subject)
-				.setSubject(subject)
+				.setId(Integer.toString(user.getId()))
+				.setSubject(user.getUsuario())
 				.setIssuer("InnerCircle")
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(calendar.getTime())
