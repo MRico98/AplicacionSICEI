@@ -4,6 +4,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import mx.uady.sicei.model.Licenciatura;
+
 public class UsuarioRequest {
 
     @NotNull
@@ -24,6 +26,9 @@ public class UsuarioRequest {
     @Size(min = 8, max = 50)
     @NotEmpty
     private String password;
+
+    @NotNull
+    private Licenciatura licenciatura;
 
     public UsuarioRequest() {
 
@@ -59,5 +64,13 @@ public class UsuarioRequest {
 
     public String getMatricula() {
         return matricula;
+    }
+
+    public void setLicenciatura(Licenciatura licenciatura) {
+        this.licenciatura = licenciatura;
+    }
+
+    public Licenciatura getLicenciatura() {
+        return licenciatura;
     }
 }

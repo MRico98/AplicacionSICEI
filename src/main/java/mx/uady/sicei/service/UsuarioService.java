@@ -53,6 +53,7 @@ public class UsuarioService {
         alumno.setNombre(request.getNombre());
         alumno.setUsuario(usuarioGuardado); // Relacionar 2 entidades
         alumno.setMatricula(request.getMatricula());
+        alumno.setLicenciatura(request.getLicenciatura());
         alumnoRepository.save(alumno);
 
         return usuarioGuardado;
