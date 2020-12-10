@@ -22,35 +22,30 @@ public class JwtTokenUtil implements Serializable {
 
 	public static final int EXPIRATION_IN_MINUTES  = 5 ;
 
-	private String secret;
-
-	public JwtTokenUtil(String secret){
-		this.secret = secret;
-	}
 
 	public JwtTokenUtil(){}
 
-	public String getUsernameFromToken(String token) {
-		return getClaimFromToken(token, Claims::getSubject);
+	public String getUsernameFromToken(String token, String secret) {
+		return getClaimFromToken(token, secret,Claims::getSubject);
 	}
 
 
-	public Date getExpirationDateFromToken(String token) {
-		return getClaimFromToken(token, Claims::getExpiration);
+	public Date getExpirationDateFromToken(String token, String secret) {
+		return getClaimFromToken(token, secret ,Claims::getExpiration);
 	}
 
-	public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-		final Claims claims = getAllClaimsFromToken(token);
+	public <T> T getClaimFromToken(String token, String secret, Function<Claims, T> claimsResolver) {
+		final Claims claims = getAllClaimsFromToken(token, secret);
 		return claimsResolver.apply(claims);
 	}
     //for retrieveing any information from token we will need the secret key
-	private Claims getAllClaimsFromToken(String token) {
+	private Claims getAllClaimsFromToken(String token, String secret) {
 		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	}
 
 	//check if the token has expired
-	private Boolean isTokenExpired(String token) {
-		final Date expiration = getExpirationDateFromToken(token);
+	private Boolean isTokenExpired(String token, String secret) {
+		final Date expiration = getExpirationDateFromToken(token,secret);
 		return expiration.before(new Date());
 	}
 
@@ -65,21 +60,17 @@ public class JwtTokenUtil implements Serializable {
 				.setIssuer("InnerCircle")
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(calendar.getTime())
-				.signWith(SignatureAlgorithm.HS512, secret).compact();
+				.signWith(SignatureAlgorithm.HS512, user.getSecret()).compact();
 	}
 
 	//validate token
-	public Boolean validateToken(String token, String name) {
+	public Boolean validateToken(String token, String name, String secret) {
 		try {
-			final String username = getUsernameFromToken(token);
-			return (username.equals(name) && !isTokenExpired(token));
+			final String username = getUsernameFromToken(token,secret);
+			return (username.equals(name) && !isTokenExpired(token,secret));
 		} catch (Exception e) {
 			logger.info( e.getMessage());
 			return false;
 		}
-	}
-
-	public void setSecret(String secret) {
-		this.secret = secret;
 	}
 }

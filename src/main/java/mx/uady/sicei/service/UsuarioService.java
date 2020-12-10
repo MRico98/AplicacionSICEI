@@ -64,7 +64,6 @@ public class UsuarioService {
         if (opt.isPresent()) {
             Usuario user = opt.get();
             //Se crea el token
-            jwtUtil.setSecret(user.getSecret());
             Token token = new Token();
             token.setToken(jwtUtil.createToken(user));
             return token;

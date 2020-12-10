@@ -38,12 +38,15 @@ public class TokenFilter extends GenericFilterBean {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private JwtTokenUtil jwtUtil;
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String authHeader = httpRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        String authHeader = httpRequest.getHeader(HttpHeaders.AUTHORIZATION).replace("Bearer ", "");
 
         if (authHeader == null || authHeader.isEmpty()) {
             chain.doFilter(request, response);
@@ -61,8 +64,8 @@ public class TokenFilter extends GenericFilterBean {
             }
 
             Usuario user = usuario.get();
-            JwtTokenUtil jwtUtil = new JwtTokenUtil(user.getSecret());
-            boolean isValid = jwtUtil.validateToken(authHeader, user.getUsuario());
+
+            boolean isValid = jwtUtil.validateToken(authHeader, user.getUsuario(), user.getSecret());
     
             if (!isValid) {
                 chain.doFilter(request, response);
