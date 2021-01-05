@@ -29,6 +29,9 @@ public class UsuarioService {
     @Autowired
     private AlumnoRepository alumnoRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<Usuario> getUsuarios() {
         return usuarioRepository.findAll();
     }
@@ -55,6 +58,9 @@ public class UsuarioService {
         alumno.setMatricula(request.getMatricula());
         alumno.setLicenciatura(request.getLicenciatura());
         alumnoRepository.save(alumno);
+
+        //Envio de salido de bienvenidad
+        emailService.sendWelcome(request.getUsuario(), request.getNombre());
 
         return usuarioGuardado;
     }
