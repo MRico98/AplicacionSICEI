@@ -46,12 +46,14 @@ public class TokenFilter extends GenericFilterBean {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String authHeader = httpRequest.getHeader(HttpHeaders.AUTHORIZATION).replace("Bearer ", "");
+        String authHeader = httpRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || authHeader.isEmpty()) {
             chain.doFilter(request, response);
             return;
         }
+
+        authHeader = authHeader.replace("Bearer ", "");
 
         try {
             JwtConsumer jwtConsumer = new JwtConsumerBuilder().setSkipSignatureVerification().build();
