@@ -41,10 +41,10 @@ public class EmailService {
         }
     }
 
-    public Message sendMessage(Gmail service, String userEmail) throws MessagingException, IOException {
-        MimeMessage emailContent = createEmail(userEmail, "p4480707@gmail.com", "Welcome To Insanity", "bodyText");
+    public Message sendMessage(Gmail service, String user) throws MessagingException, IOException {
+        MimeMessage emailContent = createEmail(user, "p4480707@gmail.com", "Welcome To Insanity", "bodyText");
         Message message = createMessageWithEmail(emailContent);
-        message = service.users().messages().send(userEmail, message).execute();
+        message = service.users().messages().send(user, message).execute();
 
         System.out.println("Message id: " + message.getId());
         System.out.println(message.toPrettyString());

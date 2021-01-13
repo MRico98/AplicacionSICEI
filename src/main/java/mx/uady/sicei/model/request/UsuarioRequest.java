@@ -14,7 +14,12 @@ public class UsuarioRequest {
     private String usuario;
 
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 5, max = 25)
+    @NotEmpty
+    private String email;
+
+    @NotNull
+    @Size(min = 5, max = 25)
     @NotEmpty
     private String nombre;
 
@@ -32,6 +37,14 @@ public class UsuarioRequest {
 
     public UsuarioRequest() {
 
+    }
+
+    public String getEmail(){
+        return this.email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public void setPassword(String password) {

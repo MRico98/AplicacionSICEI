@@ -43,6 +43,7 @@ public class UsuarioService {
         validateCreateUsuario(request.getUsuario());
 
         usuarioCrear.setUsuario(request.getUsuario());
+        usuarioCrear.setEmail(request.getEmail());
         usuarioCrear.setPassword(request.getPassword());
         String secret = UUID.randomUUID().toString();
         usuarioCrear.setSecret(secret);
@@ -60,13 +61,13 @@ public class UsuarioService {
         alumnoRepository.save(alumno);
 
         //Envio de salido de bienvenidad
-        emailService.sendWelcome(request.getUsuario(), request.getNombre());
+        emailService.sendWelcome(request.getUsuario(), request.getEmail());
 
         return usuarioGuardado;
     }
     
     public Token loadUser(String email, String password){
-        Optional<Usuario> opt = usuarioRepository.findByUsuarioAndPassword(email, password);
+        Optional<Usuario> opt = usuarioRepository.findByEmailAndPassword(email, password);
         if (opt.isPresent()) {
             Usuario user = opt.get();
             //Se crea el token
@@ -83,7 +84,6 @@ public class UsuarioService {
     }
 
     public Usuario getUsuario(Integer id) {
-
         Optional<Usuario> opt = usuarioRepository.findById(id);
 
         if (opt.isPresent()) {
