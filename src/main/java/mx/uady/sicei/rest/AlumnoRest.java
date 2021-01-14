@@ -1,10 +1,16 @@
 package mx.uady.sicei.rest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import mx.uady.sicei.util.EmailSending;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,13 +35,15 @@ public class AlumnoRest {
     // GET /api/alumnos
     @GetMapping("/alumnos")
     public ResponseEntity<List<Alumno>> getAlumnos() {
+
         return ResponseEntity.ok().body(alumnoService.getAlumnos());
     }
 
     // POST /api/alumnos
     @PostMapping("/alumnos")
-    public ResponseEntity<Alumno> postAlumnos(@RequestBody @Valid AlumnoRequest request) throws URISyntaxException {
+    public ResponseEntity<Alumno> postAlumnos(@RequestBody @Valid AlumnoRequest request) throws URISyntaxException, IOException, MessagingException {
         Alumno alumno = alumnoService.crearAlumno(request);
+
         return ResponseEntity
             .created(new URI("/alumnos/" + alumno.getId()))
             .body(alumno);
@@ -65,5 +73,9 @@ public class AlumnoRest {
         return ResponseEntity.ok().body(alumnoService.addSystemToStudent(systemId, studentId));
     }
 
+    @GetMapping("/alumnos/email")
+    public ResponseEntity<String> getEmail() throws GeneralSecurityException, IOException, MessagingException {
 
+        return null;
+    }
 }

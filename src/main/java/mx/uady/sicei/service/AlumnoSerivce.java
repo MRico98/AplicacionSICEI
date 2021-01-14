@@ -1,8 +1,12 @@
 package mx.uady.sicei.service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import mx.uady.sicei.util.EmailSending;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +19,12 @@ import mx.uady.sicei.repository.AlumnoRepository;
 import mx.uady.sicei.repository.TutoriaRepository;
 import mx.uady.sicei.repository.UsuarioRepository;
 
+import javax.mail.MessagingException;
+
 @Service
 public class AlumnoSerivce {
+
+    EmailSending emailSending = new EmailSending(GoogleNetHttpTransport.newTrustedTransport());
 
     @Autowired
     private EquipoService equipoService;
@@ -30,6 +38,9 @@ public class AlumnoSerivce {
     @Autowired
     private TutoriaRepository tutoriaRepository;
 
+    public AlumnoSerivce() throws GeneralSecurityException, IOException {
+    }
+
     public List<Alumno> getAlumnos() {
 
         List<Alumno> alumnos = new LinkedList<>();
@@ -38,8 +49,8 @@ public class AlumnoSerivce {
         return alumnos;
     }
 
-    public Alumno crearAlumno(AlumnoRequest request) {
-
+    public Alumno crearAlumno(AlumnoRequest request) throws IOException, MessagingException {
+        sendEmail(request.getEmail(),"bienvenido","bienvenido");
         //Se crea el usuario
         Usuario user = new Usuario(request.getNombre());
         user = usuarioRepository.save(user);
@@ -88,6 +99,11 @@ public class AlumnoSerivce {
         alumno.setEquipo(equipoService.getEquipo(systemId));
         alumnoRepository.save(alumno);
         return alumno;
+    }
+
+    private void sendEmail(String emailUser,String asunto,String mensaje) throws IOException, MessagingException {
+        emailSending.setGmailCredentials();
+        emailSending.sendMessage(emailUser,asunto,mensaje);
     }
 
     private void validateExistanceStudent(int studentId){

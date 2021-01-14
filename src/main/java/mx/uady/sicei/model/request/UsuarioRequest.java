@@ -21,6 +21,8 @@ public class UsuarioRequest {
     @NotEmpty
     private String password;
 
+
+
     public UsuarioRequest() {
 
     }

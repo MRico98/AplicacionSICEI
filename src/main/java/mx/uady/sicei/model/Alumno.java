@@ -46,6 +46,9 @@ public class Alumno {
     @OneToMany(mappedBy = "alumno")
     private List<Tutoria> tutorias;
 
+    @Column
+    private String email;
+
     public Alumno() {
     }
 
