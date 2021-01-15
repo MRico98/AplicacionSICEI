@@ -9,6 +9,8 @@ import com.google.api.client.util.Base64;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
@@ -31,11 +33,11 @@ public class EmailSending {
 
     public void setGmailCredentials() {
         this.gmailCredentials = GmailCredentials.builder()
-                .userEmail("manuelmartinrico1998@gmail.com")
-                .clientId("927783108655-5drrv493gtktk9eab221fgf18lvjiaph.apps.googleusercontent.com")
-                .clientSecret("WfUdk8Am2K-8vuQs4GZmeb-w")
-                .accessToken("ya29.a0AfH6SMCIGAEW0wa2mx1fBP-1Lqz3JrnUTtCENXepP4Eq50XyJ2pcWBWiqwSQa95uJUcIjFX43IRJ_-39X3myK5kSIG7aL3GL0b1BX7M6Kad6bEy0BYpFqGKizY_t7BLvzC3m5tKd8WFtsj30HsMWw_mzNNRyZ2DIBo5MYdwn_BU")
-                .refreshToken("1//0f5fgtucy1sN7CgYIARAAGA8SNwF-L9Irm3V-rPqXLQOun4gX5FxsZgu47X11t5v3CPkrTqN7yC8_80InkeuxeW8v4Zoc3jrDbVk")
+                .userEmail("CORREO")
+                .clientId("CLIENTID")
+                .clientSecret("CLIENTSECRET")
+                .accessToken("TOKEN")
+                .refreshToken("REFRESHTOKEN")
                 .build();
     }
 

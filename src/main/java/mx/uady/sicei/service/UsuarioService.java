@@ -13,6 +13,7 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,9 @@ public class UsuarioService {
 
     @Autowired
     private AlumnoRepository alumnoRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     public List<Usuario> getUsuarios() {
         return usuarioRepository.findAll();
@@ -66,17 +70,33 @@ public class UsuarioService {
         alumno.setLicenciatura(request.getLicenciatura());
         alumnoRepository.save(alumno);
 
-        try {
-            NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            EmailSending emailSending = new EmailSending(HTTP_TRANSPORT);
-            emailSending.setGmailCredentials();
-            emailSending.sendMessage(request.getEmail(), "Test", "New Test");
-        } catch (GeneralSecurityException | IOException | MessagingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+        emailService.sendEmail(request.getEmail(), "Bienvenido al sitio", "Saludos chavo");
         return usuarioGuardado;
+    }
+
+    public Usuario updateUsuario(Integer id, UsuarioRequest request) {
+        Optional<Usuario> currentUser = usuarioRepository.findById(id);
+        if(currentUser.isPresent()){
+            Usuario user = currentUser.get();
+            user.setUsuario(request.getUsuario());
+            user.setEmail(request.getEmail());
+            user.setPassword(request.getPassword());
+
+            emailService.sendEmail(request.getEmail(), "Datos del usuario actualizados", "Tus datos de usuario se han actualizado");
+            return user;
+        }
+        throw new NotFoundException();
+    }
+
+    public Usuario deleteUsuario(Integer id){
+        Optional<Usuario> currentUser = usuarioRepository.findById(id);
+        if(currentUser.isPresent()){
+            Usuario user = currentUser.get();
+            emailService.sendEmail(user.getEmail(), "Usuario eliminado", "Tu usuario fue eliminado con exito");
+            usuarioRepository.deleteById(id);
+            return user;
+        }
+        throw new NotFoundException();
     }
     
     public Token loadUser(String email, String password){
