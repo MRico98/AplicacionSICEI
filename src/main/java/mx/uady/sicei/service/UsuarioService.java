@@ -1,9 +1,17 @@
 package mx.uady.sicei.service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +24,7 @@ import mx.uady.sicei.model.Usuario;
 import mx.uady.sicei.model.request.UsuarioRequest;
 import mx.uady.sicei.repository.AlumnoRepository;
 import mx.uady.sicei.repository.UsuarioRepository;
+import mx.uady.sicei.util.EmailSending;
 import mx.uady.sicei.util.JwtTokenUtil;
 
 @Service
@@ -28,9 +37,6 @@ public class UsuarioService {
 
     @Autowired
     private AlumnoRepository alumnoRepository;
-
-    @Autowired
-    private EmailService emailService;
 
     public List<Usuario> getUsuarios() {
         return usuarioRepository.findAll();
@@ -60,8 +66,15 @@ public class UsuarioService {
         alumno.setLicenciatura(request.getLicenciatura());
         alumnoRepository.save(alumno);
 
-        //Envio de salido de bienvenidad
-        emailService.sendWelcome(request.getUsuario(), request.getEmail());
+        try {
+            NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            EmailSending emailSending = new EmailSending(HTTP_TRANSPORT);
+            emailSending.setGmailCredentials();
+            emailSending.sendMessage(request.getEmail(), "Test", "New Test");
+        } catch (GeneralSecurityException | IOException | MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         return usuarioGuardado;
     }
